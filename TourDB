@@ -1,0 +1,115 @@
+create database tour;
+
+use tour;
+
+create table travel_location(
+   id int primary key ,
+   travel_name varchar(255),
+   description varchar(255),
+   average_price double,
+   id_city int
+);
+
+create table city(
+    id int primary key ,
+    city_name varchar(255)
+);
+
+create table customer(
+    id int primary key ,
+    name varchar(255),
+    id_number nvarchar(12),
+    dob date ,
+    id_city int
+);
+
+create table tour(
+  id int primary key ,
+  tour_code varchar(255),
+  id_tour_type int ,
+  price double,
+  start_day date,
+  finish_day date
+);
+
+create table tour_type(
+    id int primary key ,
+    type_tour varchar(255),
+    name varchar(255)
+);
+
+create table tour_invoice(
+    tour_id int,
+    customer_id int,
+    status varchar(255)
+);
+
+alter table travel_location add foreign key (id_city) references city(id);
+alter table customer add foreign key (id_city) references city(id);
+alter table tour add foreign key (id_tour_type) references tour_type(id);
+alter table tour_invoice add foreign key (tour_id) references tour(id);
+alter table tour_invoice add foreign key (customer_id) references customer(id);
+
+insert into city values (1, 'Ha Noi');
+insert into city values (2, 'Da Nang');
+insert into city values (3, 'Phu Quoc');
+insert into city values (4, 'Ha Giang');
+insert into city values (5, 'Phan Thiet');
+
+insert into customer values (1,'Long','001122334455','1999-11-02',1);
+insert into customer values (2,'Dung','011122334455','1999-11-02',2);
+insert into customer values (3,'Hoang','101122334455','1999-11-02',3);
+insert into customer values (4,'Yen','071122334455','1999-11-02',4);
+insert into customer values (5,'Mai','331122334455','1999-11-02',5);
+insert into customer values (6,'Thanh','001122334466','1999-11-02',5);
+insert into customer values (7,'Loan','001127234455','1999-11-02',4);
+insert into customer values (8,'Linh','001822334455','1999-11-02',3);
+insert into customer values (9,'Hung','001126134455','1999-11-02',2);
+insert into customer values (10,'Dung','001552334455','1999-11-02',1);
+
+insert into travel_location values (1,'Lang Bac','aa',1000,1);
+insert into travel_location values (2,'Hoi An','bb',2200,2);
+insert into travel_location values (3,'Dao Phu Quoc','cc',2000,3);
+insert into travel_location values (4,'Lung Cu','dd',1500,4);
+insert into travel_location values (5,'Mui Ne','ee',4000,5);
+
+insert into tour_type values (1,'luxury','5 stars experience');
+insert into tour_type values (2,'casual','reasonable price');
+
+insert into tour values (1,'abc',1,20000000,'2019-02-01','2019-04-01');
+insert into tour values (2,'def',2,2000000,'2019-02-01','2019-04-01');
+insert into tour values (3,'ghi',2,15000000,'2019-02-01','2019-04-01');
+insert into tour values (4,'klm',2,10000000,'2019-02-01','2019-04-01');
+insert into tour values (5,'nol',1,30000000,'2019-02-01','2019-04-01');
+insert into tour values (6,'asd',1,40000000,'2019-02-01','2019-04-01');
+insert into tour values (7,'oiw',2,16000000,'2019-02-01','2019-04-01');
+insert into tour values (8,'mny',2,18000000,'2019-02-01','2019-04-01');
+insert into tour values (9,'yrt',1,25000000,'2019-02-01','2019-04-01');
+insert into tour values (10,'bcx',1,60000000,'2019-02-01','2019-04-01');
+insert into tour values (11,'poi',1,80000000,'2019-02-01','2019-04-01');
+insert into tour values (12,'tyu',2,11000000,'2019-02-01','2019-04-01');
+insert into tour values (13,'nhu',1,200000000,'2019-02-01','2019-04-01');
+insert into tour values (14,'iut',1,110000000,'2019-02-01','2019-04-01');
+insert into tour values (15,'qwe',1,22000000,'2019-02-01','2019-04-01');
+
+insert into tour_invoice values (1,1,'done');
+insert into tour_invoice values (2,2,'not yet');
+insert into tour_invoice values (3,3,'done');
+insert into tour_invoice values (4,4,'done');
+insert into tour_invoice values (5,5,'not yet');
+insert into tour_invoice values (6,6,'not yet');
+insert into tour_invoice values (7,7,'not yet');
+insert into tour_invoice values (8,8,'done');
+insert into tour_invoice values (9,9,'done');
+insert into tour_invoice values (10,10,'done');
+
+select city_name, count(city_name) as 'number of tours' from tour join tour_invoice ti on tour.id = ti.tour_id
+join customer c on ti.customer_id = c.id join city cty on c.id_city = cty.id
+group by city_name;
+
+#corona ai dam di choi :D
+select count(start_day) as 'March 2020 begin tour' from tour where (month(start_day)='03') and (year(start_day)='2020');
+select count(finish_day) as 'April 2020 end tour' from tour where (month(finish_day)='04') and (year(finish_day)='2020');
+
+#nhung ma nam truoc thi dong :D
+select count(start_day) as 'February 2019 begin tour' from tour where (month(start_day)='02') and (year(start_day)='2019');
